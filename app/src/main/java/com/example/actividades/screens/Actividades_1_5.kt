@@ -1,5 +1,7 @@
 package com.example.actividades.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -133,23 +135,11 @@ y que no deje escribir más de un punto decimal...
 @Composable
 fun Actividad4() {
     var myVal by rememberSaveable { mutableStateOf("") }
-    var salida by rememberSaveable { mutableStateOf("") }
-    var ultimo by rememberSaveable { mutableStateOf(' ') }
 
 
     if(myVal.contains(",")){
         myVal = myVal.replace(',', '.')
     }
-    /*
-    while (!myVal.isNullOrBlank()) {
-        if (myVal.length == 1 || myVal.last() != '.' || ultimo != '.') {
-            salida += myVal
-            ultimo = myVal.last()
-        }
-
-    }
-    
-     */
     if(myVal.count{it == '.'} > 1){
         myVal = myVal.substring(0, myVal.length - 1)
     }
@@ -157,7 +147,9 @@ fun Actividad4() {
         value = myVal,
         onValueChange = { myVal = it },
         label = { Text(text = "Importe") },
-        modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center)
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
     )
 }
 
@@ -170,14 +162,88 @@ cuando tenga el foco y no lo tenga.
 A nivel funcional no permitas que se introduzcan caracteres que invaliden un número decimal.
 */
 @Preview(showBackground = true)
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
+
 fun Actividad5() {
     var myVal by rememberSaveable { mutableStateOf("") }
 
-    OutlinedTextField(
+    OutlinedTextField2(
         value = myVal,
         onValueChange = { myVal = it },
-        label = { Text(text = "Importe") }
+        label = { Text(text = "Importe")}
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OutlinedTextField2(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: @Composable (() -> Unit)
+){
+    var texto by rememberSaveable { mutableStateOf("") }
+
+    if(texto.contains(",")){
+        texto = texto.replace(',', '.')
+    }
+    if(texto.count{it == '.'} > 1){
+        texto = texto.substring(0, texto.length - 1)
+    }
+
+    OutlinedTextField(
+        value = texto,
+        onValueChange = { texto = it },
+        label = { Text(text = "Importe")},
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(15.dp)
+            .wrapContentSize(Alignment.Center),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = Color.Red,
+            unfocusedBorderColor = Color.Blue
+        )
+    )
+}
+/*
+fun Actividad5() {
+    var myVal by rememberSaveable { mutableStateOf("") }
+
+
+    var accion = if(myVal.isNotEmpty()){
+        Modifier.border(1.dp,Color.Red)
+    }else{
+        Modifier.border(1.dp,Color.Blue)
+    }
+    OutlinedTextField(
+        value = cambio(myVal, ::nuevo),
+        onValueChange = { myVal = it },
+        label = { Text(text = "Importe")},
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(15.dp)
+            .wrapContentSize(Alignment.Center)
+            .then(accion)
+    )
+}
+
+
+fun cambio(digito: String, funcion: (String) -> String): String{
+
+    return funcion(digito)
+}
+
+fun nuevo(digito: String): String{
+    var resultado = digito
+    if(resultado.contains(",")){
+        resultado = digito.replace(',', '.')
+    }
+    if(resultado.count{it == '.'} > 1){
+        resultado = digito.substring(0, digito.length - 1)
+    }
+    return resultado
+}
+
+ */
+
+
+
